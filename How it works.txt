@@ -1,0 +1,47 @@
+Andriod sensors.
+
+needed in the classline
+
+	implements SensorEventListener
+
+this calls for methods:
+
+
+protected void onResume()
+	super.onResume();
+	sm.registerListener(this, magn, SensorManager.SENSOR_DELAY_GAME);
+	
+		When you tab back into the program
+		Where we have in order: SensorEventListener, magn is the name of a sensor, then chosen delay
+	
+	
+protected void onPause()
+	uper.onPause();
+    sm.unregisterListener(this);
+		When you tab out you pause the thingy
+	
+public void onAccuracyChanged(Sensor sensor, int accuracy)
+	Called when the accuracy of the registered sensor has changed.
+    Unlike onSensorChanged(), this is only called when this accuracy value changes.
+	
+public void onSensorChanged(SensorEvent event)
+	Called when there is a new sensor event.
+    Note that "on changed" is somewhat of a misnomer,
+    as this will also be called if we have a new reading from a sensor with the exact same sensor values (but a newer timestamp).
+	
+
+To initialize do
+
+private SensorManager sm;
+sm = (SensorManager)getSystemService(SENSOR_SERVICE);
+	this creates a manager
+
+private Sensor accel;
+accel = sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+	this creates a accelerometer sensor
+	
+to register the sensor we need to do so in onResume()
+	sm.registerListener(this, accel, SensorManager.SENSOR_DELAY_GAME);
+	
+to get values we do so in onSensorChanged
+	by reading from event into floats
