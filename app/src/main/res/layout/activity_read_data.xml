@@ -25,4 +25,17 @@
         android:text="Wait for data"
         app:layout_constraintLeft_toLeftOf="@+id/Azimuth"
         app:layout_constraintTop_toBottomOf="@+id/Azimuth" />
+
+    <ImageView
+        android:id="@+id/Arrow"
+        android:layout_width="107dp"
+        android:layout_height="85dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="0dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintHorizontal_bias="0.333"
+        app:layout_constraintLeft_toLeftOf="@+id/AzimuthData"
+        app:layout_constraintRight_toRightOf="@+id/Azimuth"
+        app:layout_constraintTop_toBottomOf="@+id/AzimuthData"
+        app:srcCompat="@drawable/pic_arrow" />
 </android.support.constraint.ConstraintLayout>

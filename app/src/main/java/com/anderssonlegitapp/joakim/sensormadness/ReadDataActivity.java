@@ -6,7 +6,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import static android.hardware.SensorManager.getRotationMatrix;
@@ -16,12 +16,15 @@ public class ReadDataActivity extends AppCompatActivity implements SensorEventLi
     private SensorManager sm;
     private Sensor magn;
     private Sensor accel;
+    private Sensor temp;
 
     private float[] accelValues;
     private float[] magnValues;
+    private float[] tempValues;
 
     private TextView azimuthData;
     private int counter = 0;
+    private ImageView arrow;
 
 
     @Override
@@ -31,8 +34,10 @@ public class ReadDataActivity extends AppCompatActivity implements SensorEventLi
         sm = (SensorManager)getSystemService(SENSOR_SERVICE);   //skapa manager för sensorer
         magn = sm.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD); //Magnet fält
         accel = sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER); //accelerometer
+        temp = sm.getDefaultSensor(Sensor.TYPE_TEMPERATURE);
 
         azimuthData = (TextView)findViewById(R.id.AzimuthData);
+        arrow = (ImageView)findViewById(R.id.Arrow);
     }
 
     //Tab in
@@ -40,6 +45,7 @@ public class ReadDataActivity extends AppCompatActivity implements SensorEventLi
         super.onResume();
         sm.registerListener(this, magn, SensorManager.SENSOR_DELAY_GAME);   //registrerar sensorerna
         sm.registerListener(this, accel, SensorManager.SENSOR_DELAY_GAME);
+        sm.registerListener(this, temp, SensorManager.SENSOR_DELAY_GAME);
     }
 
     //Tab ut
@@ -69,6 +75,9 @@ public class ReadDataActivity extends AppCompatActivity implements SensorEventLi
         if(event.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD){    //Triggered by event so we can se what sensor did it to store its value
             magnValues = event.values;
         }
+        if(event.sensor.getType() == Sensor.TYPE_TEMPERATURE){
+            tempValues = event.values;
+        }
 
         if(accelValues != null && magnValues != null) {
             float Rotation[] = new float[9]; //Needed for getRotationMatrix
@@ -83,34 +92,24 @@ public class ReadDataActivity extends AppCompatActivity implements SensorEventLi
                 //System.out.println(azimuthInRadians);
                 float azimuthInDegress = radToDegree(azimuthInRadians);
                 if(counter >= 10){
-                    doDraw(azimuthInDegress);
+                    doDrawCompass(azimuthInDegress);
                     counter = 0;
                 }
             }
-            /*
-                VÄRDEN FÖR ORIENTATION
-                values[0]: Azimuth, When facing north, this angle is 0,
-                    south, this angle is π.
-                    east, this angle is π/2
-                    west, this angle is -π/2.
-                    The range of values is -π to π.
-                values[1]: Pitch, angle of rotation about the x axis.
-                    This value represents the angle between a plane parallel to the device's screen and a plane parallel to the ground.
-                    Assuming that the bottom edge of the device faces the user and that the screen is face-up,
-                    tilting the top edge of the device toward the ground creates a positive pitch angle.
-                    The range of values is -π to π.
-                values[2]: Roll, angle of rotation about the y axis.
-                    This value represents the angle between a plane perpendicular to the device's screen and a plane perpendicular to the ground.
-                    Assuming that the bottom edge of the device faces the user and that the screen is face-up,
-                    tilting the left edge of the device toward the ground creates a positive roll angle.
-                    The range of values is -π/2 to π/2.
-             */
+        }
+        if(tempValues != null){
+            System.out.println("HIT TEMP");
+            doDrawTemp(tempValues[0]);
         }
     }
 
-    private void doDraw(float degree){
-        System.out.println(Float.toString(degree));
+    private void doDrawCompass(float degree){
         azimuthData.setText(Integer.toString((int) degree)); //We take the azimuth value from the orientation results.
+        arrow.setRotation((float)(((int) degree) * -1));
+    }
+
+    private void doDrawTemp(float tmp){
+        System.out.println(Float.toString(tmp));
     }
 
     private float radToDegree(float rad){
@@ -120,5 +119,4 @@ public class ReadDataActivity extends AppCompatActivity implements SensorEventLi
         }
         return degrees;
     }
-
 }

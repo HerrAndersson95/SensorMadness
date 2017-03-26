@@ -1,12 +1,13 @@
 package com.anderssonlegitapp.joakim.sensormadness;
 
+import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -24,6 +25,7 @@ public class CompassActivity extends AppCompatActivity implements SensorEventLis
     private TextView azimuthData;
     private ImageView arrow;
     private int counter = 0;
+    private Vibrator vib;
 
 
     @Override
@@ -36,6 +38,7 @@ public class CompassActivity extends AppCompatActivity implements SensorEventLis
 
         azimuthData = (TextView)findViewById(R.id.AzimuthData);
         arrow = (ImageView)findViewById(R.id.Arrow);
+        vib = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
     }
 
     //Tab in
@@ -116,6 +119,9 @@ public class CompassActivity extends AppCompatActivity implements SensorEventLis
         System.out.println(Float.toString(degree));
         azimuthData.setText(Integer.toString((int) degree)); //We take the azimuth value from the orientation results.
         arrow.setRotation((float)(((int) degree) * -1));
+        if((int) degree == 0){
+            vib.vibrate(50);
+        }
     }
 
     private float radToDegree(float rad){
@@ -125,5 +131,4 @@ public class CompassActivity extends AppCompatActivity implements SensorEventLis
         }
         return degrees;
     }
-
 }

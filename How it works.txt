@@ -45,3 +45,10 @@ to register the sensor we need to do so in onResume()
 	
 to get values we do so in onSensorChanged
 	by reading from event into floats
+
+
+https://developer.android.com/reference/android/hardware/SensorManager.html
+https://developer.android.com/reference/android/hardware/SensorEventListener.html
+https://developer.android.com/reference/android/hardware/Sensor.html#TYPE_ROTATION_VECTOR
+https://developer.android.com/reference/android/hardware/SensorManager.html#getRotationMatrix(float[], float[], float[], float[])
+https://developer.android.com/reference/android/hardware/SensorManager.html#getOrientation(float[], float[])
