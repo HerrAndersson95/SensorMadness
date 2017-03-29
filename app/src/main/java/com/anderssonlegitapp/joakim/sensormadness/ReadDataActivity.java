@@ -39,34 +39,20 @@ public class ReadDataActivity extends AppCompatActivity implements SensorEventLi
         azimuthData = (TextView)findViewById(R.id.AzimuthData);
         arrow = (ImageView)findViewById(R.id.Arrow);
     }
-
-    //Tab in
     protected void onResume() {
         super.onResume();
         sm.registerListener(this, magn, SensorManager.SENSOR_DELAY_GAME);   //registrerar sensorerna
         sm.registerListener(this, accel, SensorManager.SENSOR_DELAY_GAME);
         sm.registerListener(this, temp, SensorManager.SENSOR_DELAY_GAME);
     }
-
-    //Tab ut
     protected void onPause() {
         super.onPause();
         sm.unregisterListener(this);
     }
 
-    /*
-     Called when the accuracy of the registered sensor has changed.
-     Unlike onSensorChanged(), this is only called when this accuracy value changes.
-     */
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
     }
-
-    /*
-    Called when there is a new sensor event.
-    Note that "on changed" is somewhat of a misnomer,
-    as this will also be called if we have a new reading from a sensor with the exact same sensor values (but a newer timestamp).
-     */
     public void onSensorChanged(SensorEvent event) {
 
         if(event.sensor.getType() == Sensor.TYPE_ACCELEROMETER){    //Triggered by event so we can se what sensor did it to store its value

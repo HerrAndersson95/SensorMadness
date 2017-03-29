@@ -21,11 +21,15 @@ public class CompassActivity extends AppCompatActivity implements SensorEventLis
 
     private float[] accelValues;
     private float[] magnValues;
+    private float azimuthInRadiansSmooth = 0.0f;
 
     private TextView azimuthData;
+    private TextView azimuthDataRAW;
     private ImageView arrow;
+    private ImageView arrowRAW;
     private int counter = 0;
     private Vibrator vib;
+    float ALPHA = 0.02f;
 
 
     @Override
@@ -37,7 +41,9 @@ public class CompassActivity extends AppCompatActivity implements SensorEventLis
         accel = sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER); //accelerometer
 
         azimuthData = (TextView)findViewById(R.id.AzimuthData);
+        azimuthDataRAW = (TextView)findViewById(R.id.AzimuthDataRAW);
         arrow = (ImageView)findViewById(R.id.Arrow);
+        arrowRAW = (ImageView)findViewById(R.id.ArrowRAW);
         vib = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
     }
 
@@ -87,10 +93,14 @@ public class CompassActivity extends AppCompatActivity implements SensorEventLis
                 sm.getOrientation(Rotation, orientation); //Pass calculations into float orientation
 
                 float azimuthInRadians = orientation[0];
-                //System.out.println(azimuthInRadians);
+                azimuthInRadiansSmooth = lowPassFilter(azimuthInRadians, azimuthInRadiansSmooth);
+
                 float azimuthInDegress = radToDegree(azimuthInRadians);
+                float azimuthInDegressSmooth = radToDegree(azimuthInRadiansSmooth);
+
                 if(counter >= 10){
-                    doDraw(azimuthInDegress);
+                    doDraw(azimuthInDegressSmooth);
+                    doDrawRAW(azimuthInDegress);
                     counter = 0;
                 }
             }
@@ -116,12 +126,15 @@ public class CompassActivity extends AppCompatActivity implements SensorEventLis
     }
 
     private void doDraw(float degree){
-        System.out.println(Float.toString(degree));
-        azimuthData.setText(Integer.toString((int) degree)); //We take the azimuth value from the orientation results.
-        arrow.setRotation((float)(((int) degree) * -1));
+        azimuthData.setText(Integer.toString((int) Math.round(degree))); //We take the azimuth value from the orientation results.
+        arrow.setRotation((float)(((int) Math.round(degree)) * -1));
         if((int) degree == 0){
-            vib.vibrate(50);
+            vib.vibrate(60);
         }
+    }
+    private void doDrawRAW(float degree){
+        azimuthDataRAW.setText(Integer.toString((int) Math.round(degree))); //We take the azimuth value from the orientation results.
+        arrowRAW.setRotation((float)(((int) Math.round(degree)) * -1));
     }
 
     private float radToDegree(float rad){
@@ -130,5 +143,17 @@ public class CompassActivity extends AppCompatActivity implements SensorEventLis
             degrees += 360.0f;
         }
         return degrees;
+    }
+
+    private float lowPassFilter( float input, float output ) {
+        output = output + ALPHA * (input - output);
+        return output;
+    }
+    public static float roundToDecimal(float number, int scale) {
+        int pow = 10;
+        for (int i = 1; i < scale; i++)
+            pow *= 10;
+        float tmp = number * pow;
+        return (float) (int) ((tmp - (int) tmp) >= 0.5f ? tmp + 1 : tmp) / pow;
     }
 }

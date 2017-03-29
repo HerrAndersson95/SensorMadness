@@ -20,8 +20,7 @@
         </activity>
         <activity android:name=".ReadDataActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".CompassActivity"
-            android:screenOrientation="portrait"/>
+        <activity android:name=".CompassActivity"/>
         <activity android:name=".AccelerometerActivity"></activity>
     </application>
 

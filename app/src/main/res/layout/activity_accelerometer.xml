@@ -6,4 +6,123 @@
     android:layout_height="match_parent"
     tools:context="com.anderssonlegitapp.joakim.sensormadness.AccelerometerActivity">
 
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="8dp">
+
+        <TextView
+            android:id="@+id/accel_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Accelerometer"
+            android:textSize="25sp" />
+
+        <TextView
+            android:id="@+id/accel_x"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Wait for data: x-axis" />
+
+        <TextView
+            android:id="@+id/accel_y"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Wait for data: y-axis" />
+
+        <TextView
+            android:id="@+id/accel_z"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Wait for data: z-axis" />
+
+        <TextView
+            android:id="@+id/accel_header2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Smoothed accelerometer"
+            android:textSize="25sp" />
+
+        <TextView
+            android:id="@+id/accel_xS"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Wait for data: x-axis" />
+
+        <TextView
+            android:id="@+id/accel_yS"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Wait for data: y-axis" />
+
+        <TextView
+            android:id="@+id/accel_zS"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Wait for data: z-axis" />
+
+        <TextView
+            android:id="@+id/num_dec"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingTop="40dp"
+            android:text="Number of decimals: WAIT FOR DATA" />
+
+        <SeekBar
+            android:id="@+id/sk_decimals"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="80dp"
+            android:paddingRight="80dp"
+            android:paddingTop="20dp"
+            android:progress="20" />
+
+        <TextView
+            android:id="@+id/num_alpha"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingTop="40dp"
+            android:text="Low pass alpha: WAIT FOR DATA" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_alpha_plus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:onClick="onClickMinus"
+                android:text="-" />
+
+            <Button
+                android:id="@+id/btn_alpha_minus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:onClick="onClickPlus"
+                android:text="+" />
+        </LinearLayout>
+
+    </LinearLayout>
 </android.support.constraint.ConstraintLayout>
