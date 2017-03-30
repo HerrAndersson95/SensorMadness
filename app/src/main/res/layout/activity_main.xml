@@ -36,4 +36,13 @@
         android:text="Compass"
         tools:layout_editor_absoluteX="8dp"
         tools:layout_editor_absoluteY="0dp" />
+    <Button
+        android:id="@+id/bnt_gps"
+        android:layout_width="368dp"
+        android:layout_height="wrap_content"
+        android:onClick="clickGPS"
+        android:text="GPS"
+        app:layout_constraintTop_toBottomOf="@+id/btn_dataread"
+        tools:layout_editor_absoluteX="8dp"
+        android:layout_marginTop="8dp" />
 </android.support.constraint.ConstraintLayout>

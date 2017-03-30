@@ -26,4 +26,8 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, AccelerometerActivity.class);
         startActivity(intent);
     }
+    public void clickGPS(View v){
+        Intent intent = new Intent(this, GPSActivity.class);
+        startActivity(intent);
+    }
 }

@@ -3,6 +3,8 @@
     package="com.anderssonlegitapp.joakim.sensormadness">
 
     <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
 
     <application
         android:allowBackup="true"
@@ -18,10 +20,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ReadDataActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".CompassActivity"/>
-        <activity android:name=".AccelerometerActivity"></activity>
+        <activity
+            android:name=".ReadDataActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".CompassActivity" />
+        <activity android:name=".AccelerometerActivity" />
+        <activity android:name=".GPSActivity"></activity>
     </application>
 
 </manifest>

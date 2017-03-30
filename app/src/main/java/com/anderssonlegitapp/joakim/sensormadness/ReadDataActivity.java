@@ -16,13 +16,21 @@ public class ReadDataActivity extends AppCompatActivity implements SensorEventLi
     private SensorManager sm;
     private Sensor magn;
     private Sensor accel;
-    private Sensor temp;
+    private Sensor prox;
+    private Sensor light;
+    private Sensor press;
+    private Sensor magz;
 
     private float[] accelValues;
     private float[] magnValues;
-    private float[] tempValues;
+    private float[] proxValues;
+    private float[] eventValues;
 
     private TextView azimuthData;
+    private TextView txt_prox;
+    private TextView txt_light;
+    private TextView txt_press;
+    private TextView txt_magz;
     private int counter = 0;
     private ImageView arrow;
 
@@ -34,16 +42,27 @@ public class ReadDataActivity extends AppCompatActivity implements SensorEventLi
         sm = (SensorManager)getSystemService(SENSOR_SERVICE);   //skapa manager för sensorer
         magn = sm.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD); //Magnet fält
         accel = sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER); //accelerometer
-        temp = sm.getDefaultSensor(Sensor.TYPE_TEMPERATURE);
+        prox = sm.getDefaultSensor(Sensor.TYPE_PROXIMITY);
+        light = sm.getDefaultSensor(Sensor.TYPE_LIGHT);
+        press = sm.getDefaultSensor(Sensor.TYPE_PRESSURE);
+        magz = sm.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD_UNCALIBRATED);
+
 
         azimuthData = (TextView)findViewById(R.id.AzimuthData);
         arrow = (ImageView)findViewById(R.id.Arrow);
+        txt_prox = (TextView) findViewById(R.id.txt_prox);
+        txt_light = (TextView) findViewById(R.id.txt_light);
+        txt_press = (TextView) findViewById(R.id.txt_press);
+        txt_magz = (TextView) findViewById(R.id.txt_magz);
     }
     protected void onResume() {
         super.onResume();
         sm.registerListener(this, magn, SensorManager.SENSOR_DELAY_GAME);   //registrerar sensorerna
         sm.registerListener(this, accel, SensorManager.SENSOR_DELAY_GAME);
-        sm.registerListener(this, temp, SensorManager.SENSOR_DELAY_GAME);
+        sm.registerListener(this, prox, SensorManager.SENSOR_DELAY_GAME);
+        sm.registerListener(this, light, SensorManager.SENSOR_DELAY_GAME);
+        sm.registerListener(this, press, SensorManager.SENSOR_DELAY_GAME);
+        sm.registerListener(this, magz, SensorManager.SENSOR_DELAY_GAME);
     }
     protected void onPause() {
         super.onPause();
@@ -61,8 +80,29 @@ public class ReadDataActivity extends AppCompatActivity implements SensorEventLi
         if(event.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD){    //Triggered by event so we can se what sensor did it to store its value
             magnValues = event.values;
         }
-        if(event.sensor.getType() == Sensor.TYPE_TEMPERATURE){
-            tempValues = event.values;
+        if(event.sensor.getType() == Sensor.TYPE_PROXIMITY){
+            proxValues = event.values;
+            if(proxValues != null){
+                doDraw(proxValues[0], txt_prox);
+            }
+        }
+        if(event.sensor.getType() == Sensor.TYPE_LIGHT){
+            eventValues = event.values;
+            if(eventValues != null){
+                doDraw(eventValues[0], txt_light);
+            }
+        }
+        if(event.sensor.getType() == Sensor.TYPE_PRESSURE){
+            eventValues = event.values;
+            if(eventValues != null){
+                doDraw(eventValues[0], txt_press);
+            }
+        }
+        if(event.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD_UNCALIBRATED){
+            eventValues = event.values;
+            if(eventValues != null){
+                doDraw(eventValues[2], txt_magz);
+            }
         }
 
         if(accelValues != null && magnValues != null) {
@@ -83,26 +123,37 @@ public class ReadDataActivity extends AppCompatActivity implements SensorEventLi
                 }
             }
         }
-        if(tempValues != null){
-            System.out.println("HIT TEMP");
-            doDrawTemp(tempValues[0]);
-        }
     }
 
     private void doDrawCompass(float degree){
+
+        /*
+        if(degree > 180.0f){
+            degree =  degree - 360.0f;
+            arrow.setRotation(degree);
+        } else {
+            arrow.setRotation(degree * -1.0f);
+        }
+        */
+        System.out.println(degree);
+        arrow.setRotation(degree * -1.0f);
+        if (degree < 0.0f) {
+            degree += 360.0f;
+        }
         azimuthData.setText(Integer.toString((int) degree)); //We take the azimuth value from the orientation results.
-        arrow.setRotation((float)(((int) degree) * -1));
     }
 
-    private void doDrawTemp(float tmp){
-        System.out.println(Float.toString(tmp));
+    private void doDraw(float tmp, TextView t){
+        t.setText(Float.toString(tmp));
     }
 
     private float radToDegree(float rad){
         float degrees = (float)Math.toDegrees(rad);
+        /*
         if (degrees < 0.0f) {
             degrees += 360.0f;
         }
+        */
         return degrees;
     }
 }
