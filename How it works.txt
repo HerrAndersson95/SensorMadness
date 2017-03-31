@@ -5,9 +5,8 @@ https://github.com/miskoajkula/Gps_location/blob/master/app/src/main/res/layout/
 
 http://www.androidhive.info/2012/07/android-gps-location-manager-tutorial/
 
-
-
-
+https://www.youtube.com/watch?v=lvcGh2ZgHeA
+https://www.youtube.com/watch?v=QNb_3QKSmMk
 
 Andriod sensors.
 
