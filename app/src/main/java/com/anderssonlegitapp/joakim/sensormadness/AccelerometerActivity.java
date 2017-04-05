@@ -15,14 +15,22 @@ public class AccelerometerActivity extends AppCompatActivity implements SensorEv
 
     private SensorManager sm;
     private Sensor accel;
+    private Sensor linaccel;
     private float[] accelValues;
     private float[] accelValuesSmooth = new float[3];
+    private float[] linaccelValuesSmooth = new float[3];
     private TextView xaxis;
     private TextView yaxis;
     private TextView zaxis;
     private TextView xaxisS;
     private TextView yaxisS;
     private TextView zaxisS;
+    private TextView linxaxis;
+    private TextView linyaxis;
+    private TextView linzaxis;
+    private TextView linxaxisS;
+    private TextView linyaxisS;
+    private TextView linzaxisS;
     private TextView num_dec;
     private TextView num_alpha;
     private SeekBar sb;
@@ -36,6 +44,7 @@ public class AccelerometerActivity extends AppCompatActivity implements SensorEv
 
         sm = (SensorManager)getSystemService(SENSOR_SERVICE);
         accel = sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        linaccel = sm.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
 
         xaxis = (TextView)findViewById(R.id.accel_x);
         yaxis = (TextView)findViewById(R.id.accel_y);
@@ -44,6 +53,15 @@ public class AccelerometerActivity extends AppCompatActivity implements SensorEv
         xaxisS = (TextView)findViewById(R.id.accel_xS);
         yaxisS = (TextView)findViewById(R.id.accel_yS);
         zaxisS = (TextView)findViewById(R.id.accel_zS);
+
+        linxaxis = (TextView)findViewById(R.id.lin_accel_x);
+        linyaxis = (TextView)findViewById(R.id.lin_accel_y);
+        linzaxis = (TextView)findViewById(R.id.lin_accel_z);
+
+        linxaxisS = (TextView)findViewById(R.id.lin_accel_amooth_x);
+        linyaxisS = (TextView)findViewById(R.id.lin_accel_amooth_y);
+        linzaxisS = (TextView)findViewById(R.id.lin_accel_amooth_z);
+
         num_dec = (TextView)findViewById(R.id.num_dec);
         num_dec.setText("Number of decimals: " + BETA);
         num_alpha = (TextView)findViewById(R.id.num_alpha);
@@ -75,6 +93,7 @@ public class AccelerometerActivity extends AppCompatActivity implements SensorEv
     protected void onResume() {
         super.onResume();
         sm.registerListener(this, accel, SensorManager.SENSOR_DELAY_UI);
+        sm.registerListener(this, linaccel, SensorManager.SENSOR_DELAY_UI);
     }
 
     protected void onPause() {
@@ -91,7 +110,11 @@ public class AccelerometerActivity extends AppCompatActivity implements SensorEv
             accelValues = event.values;
         }
 
-        if(accelValues != null) {
+        if(event.sensor.getType() == Sensor.TYPE_LINEAR_ACCELERATION){
+            accelValues = event.values;
+        }
+
+        if(accelValues != null && event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
 
             accelValuesSmooth = lowPassFilter(accelValues, accelValuesSmooth);
             accelValuesSmooth[0] = roundToDecimal(accelValuesSmooth[0], BETA);
@@ -105,7 +128,19 @@ public class AccelerometerActivity extends AppCompatActivity implements SensorEv
             doDraw(accelValuesSmooth[0], xaxisS);
             doDraw(accelValuesSmooth[1], yaxisS);
             doDraw(accelValuesSmooth[2], zaxisS);
+        }
 
+        if(accelValues != null && event.sensor.getType() == Sensor.TYPE_LINEAR_ACCELERATION){
+            doDraw(accelValues[0], linxaxis);
+            doDraw(accelValues[1], linyaxis);
+            doDraw(accelValues[2], linzaxis);
+            linaccelValuesSmooth = lowPassFilter(accelValues, linaccelValuesSmooth);
+            linaccelValuesSmooth[0] = roundToDecimal(linaccelValuesSmooth[0], BETA);
+            linaccelValuesSmooth[1] = roundToDecimal(linaccelValuesSmooth[1], BETA);
+            linaccelValuesSmooth[2] = roundToDecimal(linaccelValuesSmooth[2], BETA);
+            doDraw(linaccelValuesSmooth[0], linxaxisS);
+            doDraw(linaccelValuesSmooth[1], linyaxisS);
+            doDraw(linaccelValuesSmooth[2], linzaxisS);
         }
     }
 

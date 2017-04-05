@@ -124,5 +124,76 @@
                 android:text="+" />
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/LinearAccel_header"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Linear acceleration" />
+                <TextView
+                    android:id="@+id/lin_accel_x"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Wait for data" />
+                <TextView
+                    android:id="@+id/lin_accel_y"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Wait for data" />
+                <TextView
+                    android:id="@+id/lin_accel_z"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Wait for data" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/LinearAccelSmooth_header"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Smoothed linear acceleration" />
+                <TextView
+                    android:id="@+id/lin_accel_amooth_x"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Wait for data" />
+                <TextView
+                    android:id="@+id/lin_accel_amooth_y"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Wait for data" />
+                <TextView
+                    android:id="@+id/lin_accel_amooth_z"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Wait for data" />
+
+            </LinearLayout>
+        </LinearLayout>
+
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>
