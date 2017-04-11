@@ -12,6 +12,9 @@ https://www.youtube.com/watch?v=QNb_3QKSmMk
 GPS
 http://www.vogella.com/tutorials/AndroidLocationAPI/article.html#determine-the-current-geolocation
 
+GPS SPEED
+http://www.androidhub4you.com/2013/06/how-to-get-device-current-speed-in_112.html
+
 
 Andriod sensors.
 
