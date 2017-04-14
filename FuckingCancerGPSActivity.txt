@@ -1,0 +1,150 @@
+package com.anderssonlegitapp.joakim.sensormadness;
+
+
+import android.Manifest;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.Build;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
+
+
+public class GPSActivity extends AppCompatActivity {
+
+    private TextView latitude;
+    private TextView longitude;
+    protected static final int MY_PERMISSIONS_REQUEST_GPS_FINE = 1;
+
+    private static final long MIN_DIST_UPDATES = 1; // in Meters
+    private static final long MIN_TIME_UPDATES = 1000; // in Milliseconds
+    private LocationManager locationManager;
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_gps);
+
+        latitude = (TextView) findViewById(R.id.txt_lat);
+        longitude = (TextView) findViewById(R.id.txt_long);
+
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+        if (hasPermissions()){
+            // our app has permissions.
+            //noinspection MissingPermission
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME_UPDATES, MIN_DIST_UPDATES, new SimpleLocationListener());
+            System.out.println("OK GPS SETUP COMPLETED");
+        }
+        else {
+            //our app doesn't have permissions, So i m requesting permissions.
+            requestPerms();
+        }
+
+    }
+
+    private boolean hasPermissions(){
+        int res = 0;
+        //string array of permissions,
+        String[] permissions = new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
+
+        for (String perms : permissions){
+            res = checkCallingOrSelfPermission(perms);
+            if (!(res == PackageManager.PERMISSION_GRANTED)){
+                System.out.println("PERM NOT GRANTED GRANTED");
+                return false;
+            }
+        }
+        System.out.println("PERM ALREADY GRANTED GRANTED");
+        return true;
+    }
+
+    private void requestPerms(){
+        String[] permissions = new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+            requestPermissions(permissions,MY_PERMISSIONS_REQUEST_GPS_FINE);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_GPS_FINE: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+                    System.out.println("OK PERM GRANTED");
+
+
+                    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME_UPDATES, MIN_DIST_UPDATES, new SimpleLocationListener());
+
+                    System.out.println("OK GPS SETUP COMPLETED");
+
+                } else {
+                    finish();
+                }
+            }
+            // other 'case' lines to check for other
+            // permissions this app might request
+        }
+    }
+
+    public void getCurrentLocation(View v) {
+
+        Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        System.out.println("COORD BUTTON HIT");
+        if (location != null) {
+            /*
+            String message = String.format(
+                    "Current Location \n Longitude: %1$s \n Latitude: %2$s",
+                    location.getLongitude(), location.getLatitude());
+                    */
+            longitude.setText(String.valueOf(location.getLongitude()));
+            latitude.setText(String.valueOf(location.getLatitude()));
+            System.out.println("NEW COORD BUTTON");
+            /*
+            Toast.makeText(LbsGeocodingActivity.this, message,
+                    Toast.LENGTH_LONG).show();
+                    */
+        }
+    }
+
+    private class SimpleLocationListener implements LocationListener {
+        public void onLocationChanged(Location location) {
+            /*
+            String message = String.format(
+                    "New Location \n Longitude: %1$s \n Latitude: %2$s",
+                    location.getLongitude(), location.getLatitude());
+
+            Toast.makeText(GPSActivity.this, message, Toast.LENGTH_LONG).show();
+            */
+
+            Toast.makeText(GPSActivity.this, "New reading", Toast.LENGTH_LONG).show();
+            longitude.setText(String.valueOf(location.getLongitude()));
+            latitude.setText(String.valueOf(location.getLatitude()));
+            System.out.println("NEW COORD AUTO");
+        }
+        public void onStatusChanged(String s, int i, Bundle b) {
+            Toast.makeText(GPSActivity.this, "Provider status changed", Toast.LENGTH_LONG).show();
+        }
+
+        public void onProviderDisabled(String s) {
+            Toast.makeText(GPSActivity.this, "Provider disabled by the user. GPS turned off", Toast.LENGTH_LONG).show();
+        }
+
+        public void onProviderEnabled(String s) {
+            Toast.makeText(GPSActivity.this, "Provider enabled by the user. GPS turned on", Toast.LENGTH_LONG).show();
+        }
+    }
+}
