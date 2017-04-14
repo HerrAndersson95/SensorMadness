@@ -15,6 +15,15 @@ http://www.vogella.com/tutorials/AndroidLocationAPI/article.html#determine-the-c
 GPS SPEED
 http://www.androidhub4you.com/2013/06/how-to-get-device-current-speed-in_112.html
 
+FUCK THAT REAL GPS HERE
+https://github.com/googlesamples/android-play-location/blob/master/LocationUpdates/app/src/main/java/com/google/android/gms/location/sample/locationupdates/MainActivity.java#L507
+https://github.com/googlesamples/android-play-location/blob/master/LocationUpdates/app/src/main/res/layout/main_activity.xml
+https://developer.android.com/training/location/receive-location-updates.html
+another
+https://github.com/googlesamples/android-play-location/blob/master/BasicLocationSample/app/src/main/java/com/google/android/gms/location/sample/basiclocationsample/MainActivity.java
+
+PERM CHECK
+https://github.com/learnpainless/Runtime-Permissions-Example/blob/master/app/src/main/java/com/edablogs/runtimepermissiondemo/MainActivity.java
 
 Andriod sensors.
 
