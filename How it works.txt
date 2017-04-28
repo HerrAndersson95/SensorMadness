@@ -25,6 +25,10 @@ https://github.com/googlesamples/android-play-location/blob/master/BasicLocation
 PERM CHECK
 https://github.com/learnpainless/Runtime-Permissions-Example/blob/master/app/src/main/java/com/edablogs/runtimepermissiondemo/MainActivity.java
 
+http://stackoverflow.com/questions/28535703/best-way-to-get-user-gps-location-in-background-in-android
+http://stackoverflow.com/questions/18125241/how-to-get-data-from-service-to-activity
+
+
 Andriod sensors.
 
 needed in the classline

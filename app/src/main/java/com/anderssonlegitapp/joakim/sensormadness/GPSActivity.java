@@ -4,9 +4,11 @@ package com.anderssonlegitapp.joakim.sensormadness;
 
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.location.Location;
+import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -37,6 +39,7 @@ public class GPSActivity extends AppCompatActivity implements GoogleApiClient.Co
     //UI
     private TextView latitude;
     private TextView longitude;
+    private TextView speed;
     protected Button mStartUpdatesButton;
     protected Button mStopUpdatesButton;
 
@@ -46,7 +49,7 @@ public class GPSActivity extends AppCompatActivity implements GoogleApiClient.Co
     protected static final int REQUEST_CHECK_SETTINGS = 0x1;
 
     //The desired interval for location updates. Inexact. Updates may be more or less frequent.
-    public static final long UPDATE_INTERVAL_IN_MILLISECONDS = 10000;
+    public static final long UPDATE_INTERVAL_IN_MILLISECONDS = 1000;
 
     //The fastest rate for active location updates. Exact. Updates will never be more frequent than this value.
     public static final long FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS = UPDATE_INTERVAL_IN_MILLISECONDS / 2;
@@ -62,11 +65,13 @@ public class GPSActivity extends AppCompatActivity implements GoogleApiClient.Co
     //Stores the types of location services the client is interested in using. Used for checking settings to determine if the device has optimal location settings.
     protected LocationSettingsRequest mLocationSettingsRequest;
     protected Location mCurrentLocation;
+    protected Location oldmCurrentLocation;
     protected Boolean mRequestingLocationUpdates;
 
     //Time when the location was updated represented as a String.
     protected String mLastUpdateTime;
 
+    private Vibrator vib;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,13 +79,16 @@ public class GPSActivity extends AppCompatActivity implements GoogleApiClient.Co
 
         latitude = (TextView) findViewById(R.id.txt_lat);
         longitude = (TextView) findViewById(R.id.txt_long);
+        speed = (TextView) findViewById(R.id.txt_spd);
         mStartUpdatesButton = (Button) findViewById(R.id.btn_getLocation);
         mStopUpdatesButton = (Button) findViewById(R.id.btn_stopLocation);
-
+        vib = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         mRequestingLocationUpdates = false;
         mLastUpdateTime = "";
         // Update values using data stored in the Bundle.
-        updateValuesFromBundle(savedInstanceState);
+
+        //updateValuesFromBundle(savedInstanceState);
+
         // Kick off the process of building the GoogleApiClient, LocationRequest, and
         // LocationSettingsRequest objects.
         buildGoogleApiClient();
@@ -279,10 +287,13 @@ public class GPSActivity extends AppCompatActivity implements GoogleApiClient.Co
         if (mCurrentLocation != null) {
             latitude.setText(String.format(String.valueOf(mCurrentLocation.getLatitude())));
             longitude.setText(String.format(String.valueOf(mCurrentLocation.getLongitude())));
+
+            float dist = mCurrentLocation.distanceTo(oldmCurrentLocation);
+            speed.setText(String.valueOf(dist));
             //TIME BAR
             //mLastUpdateTimeTextView.setText(String.format("%s: %s", mLastUpdateTimeLabel, mLastUpdateTime));
             System.out.println(String.valueOf(mLastUpdateTime));
-            Toast.makeText(GPSActivity.this, "TIME OF GPS UPDATE IS: " + String.valueOf(mLastUpdateTime), Toast.LENGTH_LONG).show();
+            //Toast.makeText(GPSActivity.this, "TIME OF GPS UPDATE IS: " + String.valueOf(mLastUpdateTime), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -353,6 +364,7 @@ public class GPSActivity extends AppCompatActivity implements GoogleApiClient.Co
         if (mCurrentLocation == null) {
             //PERMISSIONG CHECKING NEEDED
             mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+            oldmCurrentLocation = mCurrentLocation;
             mLastUpdateTime = DateFormat.getTimeInstance().format(new Date());
             updateLocationUI();
         }
@@ -368,8 +380,10 @@ public class GPSActivity extends AppCompatActivity implements GoogleApiClient.Co
      */
     @Override
     public void onLocationChanged(Location location) {
+        oldmCurrentLocation = mCurrentLocation;
         mCurrentLocation = location;
         mLastUpdateTime = DateFormat.getTimeInstance().format(new Date());
+        vib.vibrate(60);
         updateLocationUI();
     }
 

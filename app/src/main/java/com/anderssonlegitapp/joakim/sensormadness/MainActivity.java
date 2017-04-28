@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
     public void clickGPS(View v){
-        Intent intent = new Intent(this, GPSActivity.class);
+        Intent intent = new Intent(this, GPSActivity2.class);
         startActivity(intent);
     }
 }
